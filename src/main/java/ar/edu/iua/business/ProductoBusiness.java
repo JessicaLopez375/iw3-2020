@@ -17,17 +17,17 @@ public class ProductoBusiness implements IProductoBusiness {
 
 	@Autowired
 	private ProductoRepository productoDAO;
-	
+
 	@Override
 	public Producto load(Long id) throws NotFoundException, BusinessException {
 		Optional<Producto> op;
 		try {
-			op=productoDAO.findById(id);
+			op = productoDAO.findById(id);
 		} catch (Exception e) {
 			throw new BusinessException(e);
 		}
-		if(!op.isPresent()) {
-			throw new NotFoundException("El producto con id "+id+" no se encuentra en la BD");
+		if (!op.isPresent()) {
+			throw new NotFoundException("El producto con id " + id + " no se encuentra en la BD");
 		}
 		return op.get();
 	}
@@ -35,7 +35,7 @@ public class ProductoBusiness implements IProductoBusiness {
 	@Override
 	public List<Producto> list() throws BusinessException {
 		try {
-			return productoDAO.findAll();
+			return productoDAO.findAllByOrderByPrecioListaAsc(); //findAll()
 		} catch (Exception e) {
 			throw new BusinessException(e);
 		}
@@ -64,18 +64,76 @@ public class ProductoBusiness implements IProductoBusiness {
 
 	@Override
 	public Producto update(Producto producto) throws NotFoundException, BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+
+		load(producto.getId());
+		return add(producto);
+		/*
+		 * Optional<Producto> op; try { op = productoDAO.findById(producto.getId()); }
+		 * catch(Exception e) { throw new BusinessException(); }
+		 * 
+		 * if(!op.isPresent()) { throw new
+		 * NotFoundException("No se encontro el producto con id "+ producto.getId()); }
+		 * return productoDAO.save(producto);
+		 */
 	}
 
 	@Override
-	public List<Producto> list(String parte) throws BusinessException {
+	public List<Producto> list(String parte) throws BusinessException, NotFoundException {
+		List<Producto> p = null; 
 		try {
-			return productoDAO.findByNombreContainingOrDescripcionContainingOrderByNombreDesc(parte, parte);
+			p = productoDAO.findByNombreContainingOrDescripcionContainingOrderByNombreDesc(parte, parte);
 		} catch (Exception e) {
 			throw new BusinessException(e);
 		}
+		
+		if(p.isEmpty())
+		{
+			throw new NotFoundException("No se encontraron productos que contengan " + parte + " en su descripcion");
+		}
+		
+		return p; 
 	}
+
+	@Override
+	public List<Producto> list(double precio, String busqueda) throws NotFoundException, BusinessException {
+		List<Producto> op= null;
+
+		try {
+			if (busqueda.equalsIgnoreCase("mayor")) {
+				op = productoDAO.findByPrecioListaGreaterThan(precio);
+			}
+			if (busqueda.equalsIgnoreCase("menor")) {
+				op = productoDAO.findByPrecioListaLessThan(precio);
+			}
+
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		
+		if(op.isEmpty())
+		{
+			throw new NotFoundException("No existen productos con precio "+ busqueda + precio); 
+		}
+		return op;
+	}
+
+	@Override
+	public List<Producto> list(char firstLetter) throws BusinessException, NotFoundException {
+		List<Producto> p = null; 
+		
+		try {
+			p = productoDAO.findAllByFirstNombreStartingWith(firstLetter);
+		} catch(Exception e) {
+			throw new BusinessException(e);
+		}
+		
+		if(p.isEmpty())
+		{
+			throw new NotFoundException("No existen productos cuyo nombre empiece con " + firstLetter);
+		}
+		return p;
+	}
+	
 
 }
 

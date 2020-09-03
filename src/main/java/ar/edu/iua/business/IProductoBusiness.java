@@ -12,11 +12,15 @@ public interface IProductoBusiness {
 
 	public List<Producto> list() throws BusinessException;
 	
-	public List<Producto> list(String parte) throws BusinessException;
+	public List<Producto> list(String parte) throws BusinessException, NotFoundException;
 
 	public Producto add(Producto producto) throws BusinessException;
 	
 	public Producto update(Producto producto) throws NotFoundException, BusinessException;
 
 	public void delete(Long id) throws NotFoundException, BusinessException;
+	
+	public List<Producto> list(double precio, String busqueda) throws NotFoundException, BusinessException;
+	
+	public List<Producto> list(char firstLetter ) throws BusinessException, NotFoundException;
 }

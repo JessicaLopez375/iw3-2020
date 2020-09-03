@@ -1,5 +1,6 @@
 package ar.edu.iua.model.persistence;
 
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,16 @@ import ar.edu.iua.model.Producto;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long>{
+	
 	public List<Producto> findByNombreContainingOrDescripcionContainingOrderByNombreDesc(String nombre, String descripcion);
+	
+	public List<Producto> findByPrecioListaGreaterThan(double precio);
+	
+	public List<Producto> findByPrecioListaLessThan(double precio);
+	
+	public List<Producto> findAllByOrderByPrecioListaAsc(); 
+	
+	public List<Producto> findAllByFirstNombreStartingWith(char firstLetter ); 
+	
 }
-
 

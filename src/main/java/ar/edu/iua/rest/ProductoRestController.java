@@ -26,11 +26,11 @@ import ar.edu.iua.model.Producto;
 
 @RestController
 @RequestMapping(value = Constantes.URL_PRODUCTOS)
+
 public class ProductoRestController {
 
-	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private IProductoBusiness productoBusiness;
 
@@ -52,13 +52,34 @@ public class ProductoRestController {
 	// curl "http://localhost:8080/api/v1/productos?parte=arga"
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Producto>> list(
-			@RequestParam(name = "parte", required = false, defaultValue = "*") String parte) {
+			@RequestParam(name = "parte", required = false, defaultValue = "*") String parte,
+			@RequestParam(name = "precio", required = false, defaultValue = "0") double precio,
+			@RequestParam(name = "busqueda", required = false, defaultValue = "*") String busqueda) {
+
 		try {
-			if (parte.equals("*")) {
+			if (parte.equals("*") && precio == 0 && busqueda.equals("*")) {
 				return new ResponseEntity<List<Producto>>(productoBusiness.list(), HttpStatus.OK);
 			} else {
-				return new ResponseEntity<List<Producto>>(productoBusiness.list(parte), HttpStatus.OK);
+				
+				
+				if (parte.equals("*") && precio != 0 && !busqueda.equals("*")) {
+
+					try {
+						return new ResponseEntity<List<Producto>>(productoBusiness.list(precio, busqueda), HttpStatus.OK);
+					} catch (NotFoundException e) {
+						return new ResponseEntity<List<Producto>>(HttpStatus.NOT_FOUND);
+					}
+
+				} else {
+					try {
+						return new ResponseEntity<List<Producto>>(productoBusiness.list(parte), HttpStatus.OK);
+					} catch (NotFoundException e) {
+						return new ResponseEntity<List<Producto>>(HttpStatus.NOT_FOUND);
+					}
+				}
+
 			}
+
 		} catch (BusinessException e) {
 			log.error(e.getMessage(), e);
 			return new ResponseEntity<List<Producto>>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -104,7 +125,7 @@ public class ProductoRestController {
 			productoBusiness.delete(id);
 			return new ResponseEntity<String>(HttpStatus.OK);
 		} catch (BusinessException e) {
-		    log.error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (NotFoundException e) {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
