@@ -21,7 +21,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
 	
 	public List<Producto> findAllByOrderByPrecioListaAsc(); 
 	
-	public List<Producto> findAllByFirstNombreStartingWith(char firstLetter ); 
+	public List<Producto> findAllByNombreStartingWith(char firstLetter ); 
 	
 }
 

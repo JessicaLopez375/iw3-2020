@@ -122,7 +122,7 @@ public class ProductoBusiness implements IProductoBusiness {
 		List<Producto> p = null; 
 		
 		try {
-			p = productoDAO.findAllByFirstNombreStartingWith(firstLetter);
+			p = productoDAO.findAllByNombreStartingWith(firstLetter);
 		} catch(Exception e) {
 			throw new BusinessException(e);
 		}

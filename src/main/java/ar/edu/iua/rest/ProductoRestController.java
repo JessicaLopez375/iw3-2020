@@ -54,15 +54,23 @@ public class ProductoRestController {
 	public ResponseEntity<List<Producto>> list(
 			@RequestParam(name = "parte", required = false, defaultValue = "*") String parte,
 			@RequestParam(name = "precio", required = false, defaultValue = "0") double precio,
-			@RequestParam(name = "busqueda", required = false, defaultValue = "*") String busqueda) {
+			@RequestParam(name = "busqueda", required = false, defaultValue = "*") String busqueda,
+			@RequestParam(name = "firstLetter", required = false, defaultValue = "*") char firstLetter) {
 
 		try {
-			if (parte.equals("*") && precio == 0 && busqueda.equals("*")) {
+			if (parte.equals("*") && precio == 0 && busqueda.equals("*") && firstLetter == '*') {
 				return new ResponseEntity<List<Producto>>(productoBusiness.list(), HttpStatus.OK);
 			} else {
 				
-				
-				if (parte.equals("*") && precio != 0 && !busqueda.equals("*")) {
+				if(parte.equals("*") && precio == 0 && busqueda.equals("*") && firstLetter != '*')
+				{
+					try {
+						return new ResponseEntity<List<Producto>>(productoBusiness.list(firstLetter),HttpStatus.OK);
+					} catch (Exception e) {
+						return new ResponseEntity<List<Producto>>(HttpStatus.NOT_FOUND);
+					}
+				}
+				if (parte.equals("*") && firstLetter == '*' && precio != 0 && !busqueda.equals("*")) {
 
 					try {
 						return new ResponseEntity<List<Producto>>(productoBusiness.list(precio, busqueda), HttpStatus.OK);
