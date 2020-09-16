@@ -1,12 +1,19 @@
 package ar.edu.iua.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -32,7 +39,15 @@ public class Producto implements Serializable {
 	@Column(columnDefinition = "TINYINT DEFAULT 0")
 	private boolean enStock;
 	
+	@OneToOne(cascade =  CascadeType.ALL)
+	private ProductoDetalle productoDetalle;
 	
+	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name="producto_venta_detalle",
+			   joinColumns = @JoinColumn(name ="producto_id"),
+			   inverseJoinColumns = @JoinColumn(name = "venta_id"))
+	
+	private List<Venta> ventaList; 
 	
 	public Long getId() {
 		return id;
@@ -74,6 +89,15 @@ public class Producto implements Serializable {
 		this.enStock = enStock;
 	}
 
+	public List<Venta> getVentasList() {
+		return ventasList;
+	}
+
+	public void setVentasList(List<Venta> ventasList) {
+		this.ventasList = ventasList;
+	}
+
+	
 
 	
 
