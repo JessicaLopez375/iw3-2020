@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -42,13 +43,16 @@ public class Producto implements Serializable {
 	@OneToOne(cascade =  CascadeType.ALL)
 	private ProductoDetalle productoDetalle;
 	
-	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "proveedor_id")
+	private Proveedor proveedor;
+	
+	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)  
 	@JoinTable(name="producto_venta_detalle",
 			   joinColumns = @JoinColumn(name ="producto_id"),
 			   inverseJoinColumns = @JoinColumn(name = "venta_id"))
-	
-	private List<Venta> ventaList; 
-	
+	private List<Venta> ventaList;
+
 	public Long getId() {
 		return id;
 	}
@@ -89,16 +93,31 @@ public class Producto implements Serializable {
 		this.enStock = enStock;
 	}
 
-	public List<Venta> getVentasList() {
-		return ventasList;
+	public ProductoDetalle getProductoDetalle() {
+		return productoDetalle;
 	}
 
-	public void setVentasList(List<Venta> ventasList) {
-		this.ventasList = ventasList;
+	public void setProductoDetalle(ProductoDetalle productoDetalle) {
+		this.productoDetalle = productoDetalle;
 	}
 
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	public List<Venta> getVentaList() {
+		return ventaList;
+	}
+
+	public void setVentaList(List<Venta> ventaList) {
+		this.ventaList = ventaList;
+	} 
 	
-
+	
 	
 
 }

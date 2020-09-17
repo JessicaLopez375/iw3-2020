@@ -1,10 +1,13 @@
 package ar.edu.iua.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,15 +31,9 @@ public class Venta implements Serializable {
 	@JsonBackReference
 	private List<Producto> productoList;
 	
-	@Column()
-	private int cantidad; 
-	
-	@Column()
-	private double subTotal;
-	
-	@Column()
 	private double total;
-
+	private Date fecha; 
+	
 	public Long getId() {
 		return id;
 	}
@@ -53,21 +50,6 @@ public class Venta implements Serializable {
 		this.productoList = productoList;
 	}
 
-	public int getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
-	}
-
-	public double getSubTotal() {
-		return subTotal;
-	}
-
-	public void setSubTotal(double subTotal) {
-		this.subTotal = subTotal;
-	}
 
 	public double getTotal() {
 		return total;
@@ -77,18 +59,12 @@ public class Venta implements Serializable {
 		this.total = total;
 	}
 
+	public Date getFecha() {
+		return fecha;
+	}
 
-	
-	
- 
-	
-	
-	
-	
-	
-	
-	
-
-	
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
 	
 }
