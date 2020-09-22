@@ -32,7 +32,6 @@ public class Venta implements Serializable {
 	private List<Producto> productoList;
 	
 	private double total;
-	private Date fecha; 
 	
 	public Long getId() {
 		return id;
@@ -59,12 +58,6 @@ public class Venta implements Serializable {
 		this.total = total;
 	}
 
-	public Date getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
+	
 	
 }

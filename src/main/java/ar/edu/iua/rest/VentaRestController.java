@@ -1,7 +1,7 @@
 package ar.edu.iua.rest;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +28,18 @@ public class VentaRestController {
 	private IVentaBusiness ventaBusiness;
 	
 	    // curl "http://localhost:8080/api/v1/venta/2020-09-16" -v
-		@GetMapping(value = "/{fecha}", produces = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<List<Venta>>find(
-				@RequestParam(name = "fecha", required = false, defaultValue = "2020-09-10") Date fecha) {
+		@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Venta>>list(
+				@RequestParam(name = "total", required = false, defaultValue = "0") double total) {
 
 			try {
-				if(fecha.equals("2020-09-16"))
+				if(total == 0)
 				{
 					return new ResponseEntity<List<Venta>>(ventaBusiness.list(), HttpStatus.OK);
 				}
 				else
 				{
-					return new ResponseEntity<List<Venta>>(ventaBusiness.findByFecha(fecha), HttpStatus.OK);
+					return new ResponseEntity<List<Venta>>(ventaBusiness.findByTotal(total), HttpStatus.OK);
 				}
 							
 			} catch (BusinessException e) {

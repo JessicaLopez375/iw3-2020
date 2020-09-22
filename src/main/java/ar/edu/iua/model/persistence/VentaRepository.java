@@ -1,6 +1,6 @@
 package ar.edu.iua.model.persistence;
 
-import java.util.Date;
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +11,6 @@ import ar.edu.iua.model.Venta;
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Integer>{
 	
-	public List<Venta> findByFecha(Date fecha);
+	public List<Venta> findByTotal(double total);
 
 }
