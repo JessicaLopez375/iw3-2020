@@ -49,7 +49,7 @@ public class ProductoRestController {
 	}
 
 	// curl "http://localhost:8080/api/v1/productos"
-	// curl "http://localhost:8080/api/v1/productos?parte=arga"
+	// curl "http://localhost:8080/api/v1/productos/?parte=arga"
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Producto>> list(
 			@RequestParam(name = "parte", required = false, defaultValue = "*") String parte,
@@ -113,9 +113,33 @@ public class ProductoRestController {
 	// curl -X PUT "http://localhost:8080/api/v1/productos" -H "Content-Type:
 	// application/json" -d '{"id":2,"nombre":"Leche","descripcion":"Larga
 	// Vida","precioLista":55,"enStock":false}' -v
-	@PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> update(@RequestBody Producto producto) {
+	
+	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> update(@PathVariable("id") Long id,
+			@RequestBody Producto producto) {
+		Producto productoViejo; 
 		try {
+			productoViejo = productoBusiness.load(id); 
+			if(producto.getDescripcion() == null){
+				producto.setDescripcion(productoViejo.getDescripcion());
+			}
+			if(producto.getId()== null){
+				producto.setId(productoViejo.getId());
+			} 
+			if(producto.getNombre()== null){
+				producto.setNombre(productoViejo.getNombre());
+			} 
+			if(producto.getPrecioLista()==0.0) {
+				producto.setPrecioLista(productoViejo.getPrecioLista());
+			}
+			if(producto.getProductoDetalle()==null) {
+				producto.setProductoDetalle(productoViejo.getProductoDetalle());
+			}
+			if(producto.getProveedor()==null) {
+				producto.setProveedor(productoViejo.getProveedor());
+			}
+			
+			//Como manejar el stock?
 			productoBusiness.update(producto);
 			return new ResponseEntity<String>(HttpStatus.OK);
 		} catch (BusinessException e) {
