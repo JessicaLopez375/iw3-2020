@@ -12,5 +12,6 @@ import ar.edu.iua.model.Venta;
 public interface VentaRepository extends JpaRepository<Venta, Integer>{
 	
 	public List<Venta> findByTotal(double total);
+	public List<Venta> findByProductoListNombre(String nombre); 
 
 }

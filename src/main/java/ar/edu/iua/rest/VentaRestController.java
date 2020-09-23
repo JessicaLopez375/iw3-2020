@@ -30,16 +30,25 @@ public class VentaRestController {
 	    // curl "http://localhost:8080/api/v1/venta/2020-09-16" -v
 		@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Venta>>list(
-				@RequestParam(name = "total", required = false, defaultValue = "0") double total) {
+				@RequestParam(name = "total", required = false, defaultValue = "0") double total,
+				@RequestParam(name = "productoNombre", required = false, defaultValue = "*") String productoNombre ){
 
 			try {
-				if(total == 0)
+				if(total == 0 && productoNombre.equals("*"))
 				{
 					return new ResponseEntity<List<Venta>>(ventaBusiness.list(), HttpStatus.OK);
 				}
 				else
 				{
-					return new ResponseEntity<List<Venta>>(ventaBusiness.findByTotal(total), HttpStatus.OK);
+					if(total != 0 && productoNombre.equals("*"))
+					{
+						return new ResponseEntity<List<Venta>>(ventaBusiness.findByTotal(total), HttpStatus.OK);
+					}
+					else
+					{
+						return new ResponseEntity<List<Venta>>(ventaBusiness.findByProductoListNombre(productoNombre), HttpStatus.OK);
+					}
+					
 				}
 							
 			} catch (BusinessException e) {

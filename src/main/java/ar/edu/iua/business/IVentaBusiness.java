@@ -11,4 +11,6 @@ public interface IVentaBusiness {
 
 	public List<Venta> findByTotal(double total) throws BusinessException, NotFoundException; 
 	public List<Venta> list() throws BusinessException, NotFoundException; 
+	public List<Venta> findByProductoListNombre(String nombre) throws BusinessException, NotFoundException; 
+	
 }

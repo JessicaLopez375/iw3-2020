@@ -55,6 +55,26 @@ public class VentaBusiness implements IVentaBusiness {
 		return v; 
 	}
 
+	@Override
+	public List<Venta> findByProductoListNombre(String nombre) throws BusinessException, NotFoundException {
+
+		List<Venta> v; 
+				
+		try {
+			v = ventaDAO.findByProductoListNombre(nombre);
+		} catch (Exception e) {
+			throw new BusinessException(e);
+		}
+		
+		if(v.isEmpty())
+		{
+			throw new NotFoundException("No se registran ventas de ese producto");
+		}
+		
+		return v; 
+	}
+
+	
 
 
 	

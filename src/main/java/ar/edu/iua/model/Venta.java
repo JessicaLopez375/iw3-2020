@@ -58,6 +58,7 @@ public class Venta implements Serializable {
 		this.total = total;
 	}
 
+
 	
 	
 }
