@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.iua.model.Venta;
+import ar.edu.iua.model.VentaDTO;
 
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Integer>{
 	
 	public List<Venta> findByTotal(double total);
 	public List<Venta> findByProductoListNombre(String nombre); 
+	public List<VentaDTO> findByElProducto(String name);
 
 }

@@ -3,13 +3,18 @@ package ar.edu.iua.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.NamedNativeQuery;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,6 +24,16 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "proveedor")
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="id")
+
+@NamedNativeQuery(name = "Proveedor.findAllProveedores", 
+query = "select nombre from proveedor", 
+resultSetMapping = "proveedormap")
+
+@SqlResultSetMapping(
+    name="proveedormap",
+	classes = { @ConstructorResult(columns = { @ColumnResult(name = "nombre", type = String.class)},
+	targetClass = ProveedorDTO.class) })
+
 public class Proveedor implements Serializable {
 	
 	

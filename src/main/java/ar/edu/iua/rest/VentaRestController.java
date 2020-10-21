@@ -1,7 +1,5 @@
 package ar.edu.iua.rest;
 
-
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import ar.edu.iua.business.IVentaBusiness;
 import ar.edu.iua.business.exception.BusinessException;
 import ar.edu.iua.business.exception.NotFoundException;
 import ar.edu.iua.model.Venta;
+import ar.edu.iua.model.VentaDTO;
 
 @RestController
 @RequestMapping(value = Constantes.URL_VENTAS)
 
 public class VentaRestController {
-	
+
 	@Autowired
 	private IVentaBusiness ventaBusiness;
-	
-	    // curl "http://localhost:8080/api/v1/venta/2020-09-16" -v
-		@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	// curl "http://localhost:8080/api/v1/venta/2020-09-16" -v
+	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<Venta>>list(
 				@RequestParam(name = "total", required = false, defaultValue = "0") double total,
 				@RequestParam(name = "productoNombre", required = false, defaultValue = "*") String productoNombre ){
@@ -58,5 +56,14 @@ public class VentaRestController {
 			}
 		}
 
-	
+	@GetMapping(value = "/nombreProducto")
+	    public ResponseEntity<List<VentaDTO>>loadBynombreProducto(@RequestParam("nombreProducto") String nombreProducto) {
+	        try {
+	            return new ResponseEntity<List<VentaDTO>>(ventaBusiness.findByElProducto(nombreProducto), HttpStatus.OK);
+	        } catch (BusinessException e) {
+	            return new ResponseEntity<List<VentaDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+	        } catch (NotFoundException e) {
+	            return new ResponseEntity<List<VentaDTO>>(HttpStatus.NOT_FOUND);
+	            }
+	}
 }

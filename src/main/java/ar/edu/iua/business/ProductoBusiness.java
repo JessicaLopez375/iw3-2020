@@ -133,6 +133,19 @@ public class ProductoBusiness implements IProductoBusiness {
 		}
 		return p;
 	}
+
+	@Override
+	public void updateByElId(Long id) throws NotFoundException, BusinessException {
+		load(id);
+		productoDAO.updateByElId(id);
+		
+	}
+
+	@Override
+	public void updateByLaDescripcion(String descripcion) throws NotFoundException, BusinessException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

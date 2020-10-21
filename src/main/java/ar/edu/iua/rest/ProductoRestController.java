@@ -110,9 +110,9 @@ public class ProductoRestController {
 		}
 	}
 
-	// curl -X PUT "http://localhost:8080/api/v1/productos" -H "Content-Type:
-	// application/json" -d '{"id":2,"nombre":"Leche","descripcion":"Larga
-	// Vida","precioLista":55,"enStock":false}' -v
+	//curl -X PUT "http://localhost:8080/api/v1/productos" -H "Content-Type:
+	//application/json" -d '{"id":2,"nombre":"Leche","descripcion":"Larga
+	//Vida","precioLista":55,"enStock":false}' -v
 	
 	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> update(@PathVariable("id") Long id,
@@ -164,6 +164,29 @@ public class ProductoRestController {
 		}
 	}
 
-//URL-> http://localhost:8080/api/v1/productos/1 --> IProductoBusiness.load(  1 ) 
+//URL-> http://localhost:8080/api/v1/productos/1 --> IProductoBusiness.load(  1 )
+	
+	@PutMapping(value = "/id", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateStock(
+			@RequestParam(name = "id", required = false, defaultValue = "0") Long id,
+			@RequestBody boolean stock) {
+		
+		if(id!=0) {
+			try {
+				productoBusiness.updateByElId(id);
+				} catch (BusinessException e) {
 
+					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+				} catch (NotFoundException e) {
+					return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+				}
+			}
+		
+			return new ResponseEntity<String>(HttpStatus.OK);
+		
+		}
+		
 }
+
+
+
